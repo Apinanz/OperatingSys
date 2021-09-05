@@ -27,7 +27,6 @@ public class Server {
             String fileLoader;
             while ((fileLoader = bufReader.readLine()) != null) {
                 arrFile.add(fileLoader);
-                System.out.println(fileLoader);
             }
 
         } catch (IOException e) {
