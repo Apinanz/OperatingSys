@@ -18,7 +18,6 @@ public class Server {
     public static void main(String[] args) {
 
         //Reader name file
-        StringBuilder sb = new StringBuilder();
         String path = "C:\\Users\\api_q\\OneDrive\\เดสก์ท็อป\\file.txt";
         File file = new File(path);
 
