@@ -2,7 +2,9 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -25,26 +27,15 @@ public class Server {
         Client client = new Client();
 
         // Reader name file
-        String path = "C:/Users/api_q/OneDrive/เดสก์ท็อป/OperatingSysProj/OperatingSysProj/file.txt";
+        String path = "C:/Users/api_q/OneDrive/เดสก์ท็อป/OperatingProj";
         File file = new File(path);
-
-        ArrayList<String> arrFile = new ArrayList<String>();
-        try {
-            BufferedReader bufReader = new BufferedReader(new FileReader(file));
-            String fileLoader;
-            while ((fileLoader = bufReader.readLine()) != null) {
-                arrFile.add(fileLoader);
-            }
-
-        } catch (IOException e) {
-            System.out.println("file not found");
+        File[] fileName = file.listFiles();
+        String[][] arr = new String[fileName.length][2];
+        for (int i = 0; i < fileName.length; i++) {
+            arr[i][0] = fileName[i].getName();
+            arr[i][1] = fileName[i].length() + "";
         }
-        int index = 0;
-        String[][] arr = new String[arrFile.size()][2];
         String[] col = { "ไฟล์ทั้งหมด", "ขนาด" };
-        for (String object : arrFile) {
-            arr[index++][0] = object;
-        }
 
         // frame Main Server
         JFrame frameMain = new JFrame();
@@ -142,14 +133,18 @@ public class Server {
         jpMain.add(jpBut, "Panel 2");
         frameMain.getContentPane().add(jpMain, BorderLayout.CENTER);
 
+        
         // ส่วนของ connecting
 
         ServerSocket serverSocket = new ServerSocket(8087);
-        try {
-            Socket clientSocket = serverSocket.accept();
+        while (true) {
+            try {
+                Socket clientSocket = serverSocket.accept();
+                new HandleClient(clientSocket).start();
 
-        } catch (Exception e) {
-            System.out.println("0");
+            } catch (Exception e) {
+                System.out.println("0");
+            }
         }
 
     }
