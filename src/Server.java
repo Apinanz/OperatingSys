@@ -9,21 +9,18 @@ import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-
 public class Server {
-    public static final int PORT = 8080;
+    public static final int PORT = 8087;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Client client = new Client();
 
         // Reader name file
-        String path = "C:\\Users\\api_q\\OneDrive\\เดสก์ท็อป\\OperatingSysProj\\OperatingSysProj\\file.txt";
+        String path = "C:/Users/api_q/OneDrive/เดสก์ท็อป/OperatingSysProj/OperatingSysProj/file.txt";
         File file = new File(path);
 
         ArrayList<String> arrFile = new ArrayList<String>();
@@ -61,22 +58,30 @@ public class Server {
         frameServer.getContentPane().add(jpFile);
 
         // ส่วนของ connecting
-        try {
-            ServerSocket serverSocket = new ServerSocket(PORT);
-            
 
-            //Jframe
+        ServerSocket serverSocket = new ServerSocket(8087);
+        try {
+            // Jframe
             JFrame frameLog = new JFrame();
             frameLog.setTitle("Log");
             frameLog.setSize(500, 800);
 
-            //Panel and Lable
+            // Panel and Lable
             JPanel jpLog = new JPanel();
             JLabel jlLog = new JLabel();
-            jlLog.setText("Waiting to connecting from Client "+client.port);
-            Socket  = serverSocket.accept();
-            jlLog.setText("Connecting from Client "+client.port);
+            jlLog.setText("Waiting to connecting from Client " + client.PORT);
+
+           
+
+            jlLog.setText("Connecting from Client " + client.PORT);
             jpLog.add(jlLog);
+            System.out.println("connect");
+
+            frameLog.add(jpLog);
+            frameLog.setVisible(true); 
+            
+            Socket clientSocket = serverSocket.accept();
+
         } catch (Exception e) {
             System.out.println("0");
         }

@@ -6,14 +6,20 @@ import javax.swing.JOptionPane;
 
 
 public class Client {
-    public static final int port = 8080;
+    public static final int PORT = 8087;
     public static void main(String[] args) {
 
 
         //connect to server
         try {
-            Socket socketCilen = new Socket("locathost", port);
+           
             
+            JFrame frameLog = new JFrame();
+            frameLog.setTitle("Client");
+            frameLog.setSize(500, 800);
+            frameLog.setVisible(true); 
+            
+            Socket clientSocket = new Socket("locathost",8087);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,"Can't Connected. Please Try Again!","ERROR CONNECTED",JOptionPane.ERROR_MESSAGE);
