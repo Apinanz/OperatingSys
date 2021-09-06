@@ -74,7 +74,7 @@ public class Server {
             JPanel jpLog = new JPanel();
             JLabel jlLog = new JLabel();
             jlLog.setText("Waiting to connecting from Client "+client.port);
-            Socket socket = serverSocket.accept();
+            Socket  = serverSocket.accept();
             jlLog.setText("Connecting from Client "+client.port);
             jpLog.add(jlLog);
         } catch (Exception e) {
