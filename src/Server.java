@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -22,14 +23,17 @@ import java.awt.BorderLayout;
 
 public class Server {
     public static final int PORT = 8087;
-
+    File[] fileName;
     public static void main(String[] args) throws IOException {
-        Client client = new Client();
+       new Server().Model();
 
+    }
+
+    private void Model() throws IOException {
         // Reader name file
         String path = "C:/Users/api_q/OneDrive/เดสก์ท็อป/OperatingProj";
         File file = new File(path);
-        File[] fileName = file.listFiles();
+        fileName = file.listFiles();
         String[][] arr = new String[fileName.length][2];
         for (int i = 0; i < fileName.length; i++) {
             arr[i][0] = fileName[i].getName();
@@ -102,9 +106,9 @@ public class Server {
                 // Panel and Lable
                 JPanel jpLog = new JPanel();
                 JLabel jlLog = new JLabel();
-                jlLog.setText("Waiting to connecting from Client " + client.PORT);
+                jlLog.setText("Waiting to connecting from Client ");
 
-                jlLog.setText("Connecting from Client " + client.PORT);
+                jlLog.setText("Connecting from Client ");
                 jpLog.add(jlLog);
                 System.out.println("connect");
 
@@ -133,7 +137,6 @@ public class Server {
         jpMain.add(jpBut, "Panel 2");
         frameMain.getContentPane().add(jpMain, BorderLayout.CENTER);
 
-        
         // ส่วนของ connecting
 
         ServerSocket serverSocket = new ServerSocket(8087);
@@ -146,6 +149,27 @@ public class Server {
                 System.out.println("0");
             }
         }
+    }
 
+    class HandleClient extends Thread {
+        Socket clientSocket;
+
+        HandleClient(Socket socket) {
+            this.clientSocket = socket;
+        }
+
+        public void run() {
+            try {
+                DataInputStream din = new DataInputStream(clientSocket.getInputStream());
+                DataOutputStream dout = new DataOutputStream(clientSocket.getOutputStream());
+
+                dout.writeInt(fileName.length);
+                for(File f : fileName){
+                    dout.writeUTF(f.getName());
+                }
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+        }
     }
 }
