@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import java.awt.CardLayout;
@@ -31,7 +32,7 @@ public class Server {
 
     private void Model() throws IOException {
         // Reader name file
-        String path = "C:/Users/api_q/OneDrive/เดสก์ท็อป/OperatingProj";
+        String path = "C:/Users/tubti/OneDrive - Silpakorn University/Documents/Thread/server/";
         File file = new File(path);
         fileName = file.listFiles();
         String[][] arr = new String[fileName.length][2];
@@ -166,6 +167,12 @@ public class Server {
                 dout.writeInt(fileName.length);
                 for(File f : fileName){
                     dout.writeUTF(f.getName());
+                }
+                for (File f : fileName) {
+                    dout.writeUTF("" + Files.probeContentType(f.toPath())); // ชนิดข้อมูลไฟล์
+                }
+                for (File f : fileName) {
+                    dout.writeLong(f.length()); // ขนาดไฟล์
                 }
                 while (true) {
                     String reqFile = din.readUTF();

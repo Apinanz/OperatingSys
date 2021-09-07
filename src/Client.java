@@ -29,9 +29,16 @@ public class Client {
             dout = new DataOutputStream(clientSocket.getOutputStream());
 
             file = din.readInt();
-            fileName = new Object[file][2];
+            fileName = new Object[file][4];
             for (int i = 0; i < file; i++) {
                 fileName[i][0] = din.readUTF();
+            }
+            for (int i = 0; i < file; i++) {
+                fileName[i][1] = din.readUTF(); // ชนิดข้อมูลไฟล์
+            }
+            for (int i = 0; i < file; i++) {
+                String n = "" + din.readLong(); // ขนาดไฟล์
+                fileName[i][2] = n;
             }
 
         } catch (Exception e) {
