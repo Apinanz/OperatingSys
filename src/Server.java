@@ -38,7 +38,7 @@ public class Server {
         String[][] arr = new String[fileName.length][2];
         for (int i = 0; i < fileName.length; i++) {
             arr[i][0] = fileName[i].getName();
-            arr[i][1] = fileName[i].length() + "";
+            arr[i][1] = fileName[i].length()/1024+1 +" "+"KB";
         }
         String[] col = { "ไฟล์ทั้งหมด", "ขนาด" };
 

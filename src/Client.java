@@ -37,8 +37,8 @@ public class Client {
                 fileName[i][1] = din.readUTF(); // ชนิดข้อมูลไฟล์
             }
             for (int i = 0; i < file; i++) {
-                String n = "" + din.readLong(); // ขนาดไฟล์
-                fileName[i][2] = n;
+                String n = "" + din.readInt(); // ขนาดไฟล์
+                fileName[i][2] = din.readInt()/1024+1;
             }
 
         } catch (Exception e) {

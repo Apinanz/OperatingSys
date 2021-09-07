@@ -53,7 +53,7 @@ class DownloadPage extends JFrame
         for (int i = 0; i < client.file; i++) {
             dataValues[i][0] = client.fileName[i][0].toString();
             dataValues[i][1] = client.fileName[i][1].toString().substring(client.fileName[i][1].toString().indexOf("/")+1,client.fileName[i][1].toString().length());
-            dataValues[i][2] = client.fileName[i][2].toString();
+            dataValues[i][2] = client.fileName[i][2].toString()+" "+"KB";
             dataValues[i][3] = client.fileName[i][0].toString();
         }
         model.setDataVector(dataValues,columnNames);
