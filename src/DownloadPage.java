@@ -47,21 +47,21 @@ class DownloadPage extends JFrame
 
         getContentPane().add(topPanel);
 
-        columnNames = new String[] { "File", "File Type", "Size" ,"Download" };
+        columnNames = new String[] { "File", "File Type", "Size", "Download" };
 
         dataValues = new String[client.file][4];
         for (int i = 0; i < client.file; i++) {
             dataValues[i][0] = client.fileName[i][0].toString();
-            dataValues[i][1] = client.fileName[i][1].toString().substring(client.fileName[i][1].toString().indexOf("/")+1,client.fileName[i][1].toString().length());
-            dataValues[i][2] = client.fileName[i][2].toString()+" "+"KB";
+            dataValues[i][1] = client.fileName[i][1].toString().substring(client.fileName[i][1].toString().indexOf("/") + 1, client.fileName[i][1].toString().length());
+            dataValues[i][2] = client.fileName[i][2].toString() + " " + "KB";
             dataValues[i][3] = client.fileName[i][0].toString();
         }
-        model.setDataVector(dataValues,columnNames);
-        //TableModel model = new myTableModel("owntable");
+        model.setDataVector(dataValues, columnNames);
+        // TableModel model = new myTableModel("owntable");
 
         table = new JTable(model);
 
-        //table.setModel(model);
+        // table.setModel(model);
 
         table.getColumn("Download").setCellRenderer(new ButtonRenderer(dataValues));
 
@@ -81,25 +81,29 @@ class DownloadPage extends JFrame
 
                 {
 
-                        JOptionPane.showMessageDialog(null, "Do you want to download "+button.getName()+"?");
-                        try {
-                            DataOutputStream dout = new DataOutputStream(client.clientSocket.getOutputStream());
-                            DataInputStream din = new DataInputStream(client.clientSocket.getInputStream());
-                            dout.writeUTF(button.getName());
-                            String filePath = "C:/Users/api_q/OneDrive/เดสก์ท็อป/CilentFile/"+button.getName();
-                            byte [] data = new byte[(int)din.readInt()];
-                            din.readFully(data,0,data.length);
-                            File fileDownload = new File(filePath);
+                        int temp = JOptionPane.showConfirmDialog(table, "Do you want to download " + button.getName() + "?");
+
+                        if (temp == 0) {
                             try {
-                                FileOutputStream fout = new FileOutputStream(fileDownload);
-                                fout.write(data);
+                                DataOutputStream dout = new DataOutputStream(client.clientSocket.getOutputStream());
+                                DataInputStream din = new DataInputStream(client.clientSocket.getInputStream());
+                                dout.writeUTF(button.getName());
+                                // String filePath = "C:/Users/api_q/OneDrive/เดสก์ท็อป/CilentFile/"+button.getName();
+                                String filePath = "C:/Users/tubti/OneDrive - Silpakorn University/Documents/Thread/Client/" + button.getName();
+                                byte[] data = new byte[(int) din.readInt()];
+                                din.readFully(data, 0, data.length);
+                                File fileDownload = new File(filePath);
+                                try {
+                                    FileOutputStream fout = new FileOutputStream(fileDownload);
+                                    fout.write(data);
+
+                                } catch (Exception e) {
+                                    // TODO: handle exception
+                                }
 
                             } catch (Exception e) {
-                                //TODO: handle exception
+                                // TODO: handle exception
                             }
-
-                        } catch (Exception e) {
-                            //TODO: handle exception
                         }
 
                     }
@@ -113,7 +117,7 @@ class DownloadPage extends JFrame
     class ButtonRenderer extends JButton implements TableCellRenderer {
 
         public ButtonRenderer(String[][] dataValues) {
-            
+
             setOpaque(true);
 
         }
