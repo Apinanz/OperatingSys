@@ -232,7 +232,6 @@ class DownloadPage extends JFrame {
             while ((count = din.read(data)) != -1) {
                 total += count;
                 setProgress((int)((total*100)/data.length));
-                System.out.println(count + " " + total + " " + data.length);
                 fout.write(data, 0, count);
                 if(total == data.length){
                     break;
