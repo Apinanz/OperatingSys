@@ -1,22 +1,18 @@
-import java.awt.*;
 
+import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-
 import javax.swing.*;
-
-import javax.swing.table.TableModel;
-
 import javax.swing.table.DefaultTableModel;
-
 import javax.swing.table.*;
 
-class DownloadPage extends JFrame
+class DownloadPage extends JFrame {
 
-{
     Client client = new Client();
 
     private JPanel topPanel, topPanel1;
@@ -25,15 +21,14 @@ class DownloadPage extends JFrame
 
     private JScrollPane scrollPane, scrollPane1;
 
-    private String[] columnNames = new String[2];
+    private String[] columnNames;
 
     private String[][] dataValues;
 
     JButton button = new JButton();
 
-    public DownloadPage()
+    public DownloadPage() {
 
-    {
         DefaultTableModel model = new DefaultTableModel();
 
         setTitle("Downloader");
@@ -47,21 +42,18 @@ class DownloadPage extends JFrame
 
         getContentPane().add(topPanel);
 
-        columnNames = new String[] { "File", "File Type", "Size", "Download" };
+        columnNames = new String[]{"File", "File Type", "Size", "Download"};
 
         dataValues = new String[client.file][4];
         for (int i = 0; i < client.file; i++) {
             dataValues[i][0] = client.fileName[i][0].toString();
-            dataValues[i][1] = client.fileName[i][1].toString().substring(client.fileName[i][1].toString().indexOf("/") + 1, client.fileName[i][1].toString().length());
-            dataValues[i][2] = client.fileName[i][2].toString() + " " + "KB";
+            dataValues[i][1] = client.fileName[i][1].toString();
+            dataValues[i][2] = client.fileName[i][2].toString();
             dataValues[i][3] = client.fileName[i][0].toString();
         }
         model.setDataVector(dataValues, columnNames);
-        // TableModel model = new myTableModel("owntable");
 
         table = new JTable(model);
-
-        // table.setModel(model);
 
         table.getColumn("Download").setCellRenderer(new ButtonRenderer(dataValues));
 
@@ -72,45 +64,27 @@ class DownloadPage extends JFrame
         topPanel.add(scrollPane, BorderLayout.CENTER);
 
         button.addActionListener(
+                new ActionListener() {
 
-                new ActionListener()
+            public void actionPerformed(ActionEvent event) {
 
-                {
+                int temp = JOptionPane.showConfirmDialog(topPanel1, "Do you want to download "
+                        + button.getName() + " ?", "Customized Dialog",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, new ImageIcon("C:/Users/tubti/OneDrive - Silpakorn University/Documents/Thread/among.png"));
 
-                    public void actionPerformed(ActionEvent event)
+                if (temp == 0) {
+                    try {
+                        
+                        new BackgroundWorker().execute();
 
-                {
-
-                    int temp = JOptionPane.showConfirmDialog(topPanel1, "Do you want to download " + button.getName() + " ?",
-                     "Customized Dialog", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, new ImageIcon("C:/Users/tubti/OneDrive - Silpakorn University/Documents/Thread/among.png"));
-
-                        if (temp == 0) {
-                            try {
-                                DataOutputStream dout = new DataOutputStream(client.clientSocket.getOutputStream());
-                                DataInputStream din = new DataInputStream(client.clientSocket.getInputStream());
-                                dout.writeUTF(button.getName());
-                                // String filePath = "C:/Users/api_q/OneDrive/เดสก์ท็อป/CilentFile/"+button.getName();
-                                String filePath = "C:/Users/tubti/OneDrive - Silpakorn University/Documents/Thread/Client/" + button.getName();
-                                byte[] data = new byte[(int) din.readInt()];
-                                din.readFully(data, 0, data.length);
-                                File fileDownload = new File(filePath);
-                                try {
-                                    FileOutputStream fout = new FileOutputStream(fileDownload);
-                                    fout.write(data);
-
-                                } catch (Exception e) {
-                                    // TODO: handle exception
-                                }
-
-                            } catch (Exception e) {
-                                // TODO: handle exception
-                            }
-                        }
-
+                    } catch (Exception e) {
+                        //TODO: handle exception
                     }
-
                 }
 
+            }
+
+        }
         );
 
     }
@@ -124,7 +98,6 @@ class DownloadPage extends JFrame
         }
 
         public Component getTableCellRendererComponent(JTable table, Object value,
-
                 boolean isSelected, boolean hasFocus, int row, int column) {
 
             setText("Download");
@@ -147,7 +120,6 @@ class DownloadPage extends JFrame
         }
 
         public Component getTableCellEditorComponent(JTable table, Object value,
-
                 boolean isSelected, int row, int column) {
 
             label = "Download";
@@ -167,17 +139,13 @@ class DownloadPage extends JFrame
 
     }
 
-    public class myTableModel extends DefaultTableModel
-
-    {
+    public class myTableModel extends DefaultTableModel {
 
         String dat;
 
         JButton button = new JButton("");
 
-        myTableModel(String tname)
-
-        {
+        myTableModel(String tname) {
 
             super(dataValues, columnNames);
 
@@ -185,13 +153,9 @@ class DownloadPage extends JFrame
 
         }
 
-        public boolean isCellEditable(int row, int cols)
+        public boolean isCellEditable(int row, int cols) {
 
-        {
-
-            if (dat == "owntable")
-
-            {
+            if (dat == "owntable") {
 
                 if (cols == 0) {
                     return false;
@@ -203,5 +167,78 @@ class DownloadPage extends JFrame
 
         }
 
+    }
+
+    public class BackgroundWorker extends SwingWorker<Void, Void> {
+
+        private JProgressBar pb;
+        private JDialog dialog;
+
+        public BackgroundWorker() {
+
+            addPropertyChangeListener(new PropertyChangeListener() {
+                @Override
+                public void propertyChange(PropertyChangeEvent evt) {
+                    if ("progress".equalsIgnoreCase(evt.getPropertyName())) {
+                        if (dialog == null) {
+                            dialog = new JDialog();
+                            dialog.setTitle("Processing");
+                            dialog.setLayout(new GridBagLayout());
+                            dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+                            GridBagConstraints gbc = new GridBagConstraints();
+                            gbc.insets = new Insets(2, 2, 2, 2);
+                            gbc.weightx = 10;
+                            gbc.gridy = 0;
+                            dialog.add(new JLabel("Processing..."), gbc);
+                            pb = new JProgressBar();
+                            pb.setStringPainted(true);
+                            gbc.gridy = 1;
+                            dialog.add(pb, gbc);
+                            dialog.pack();
+                            dialog.setLocationRelativeTo(null);
+                            dialog.setModal(true);
+                            JDialog.setDefaultLookAndFeelDecorated(true);
+                            dialog.setVisible(true);
+                        }
+                        pb.setValue(getProgress());
+                    }
+                }
+            });
+        }
+
+        @Override
+        protected void done() {
+            if (dialog != null) {
+                dialog.dispose();
+            }
+        }
+
+        @Override
+        protected Void doInBackground() throws Exception {
+
+            DataOutputStream dout = new DataOutputStream(client.clientSocket.getOutputStream());
+            DataInputStream din = new DataInputStream(client.clientSocket.getInputStream());
+            dout.writeUTF(button.getName());
+            String filePath = "C:/Users/tubti/OneDrive - Silpakorn University/Documents/Thread/Client/" + button.getName();
+            byte[] data = new byte[(int) din.readInt()];
+
+            File fileDownload = new File(filePath);
+            FileOutputStream fout = new FileOutputStream(fileDownload);
+
+            int count;
+
+            long total = 0;
+
+            while ((count = din.read(data)) != -1) {
+                total += count;
+                setProgress((int)((total*100)/data.length));
+                System.out.println(count + " " + total + " " + data.length);
+                fout.write(data, 0, count);
+                if(total == data.length){
+                    break;
+                }
+            }
+            return null;
+        }
     }
 }
