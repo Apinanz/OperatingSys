@@ -167,6 +167,19 @@ public class Server {
                 for(File f : fileName){
                     dout.writeUTF(f.getName());
                 }
+                while (true) {
+                    String reqFile = din.readUTF();
+                    //System.out.println(reqFile);
+                    for(int i=0; i<fileName.length; i++){
+                        if(fileName[i].getName().equals(reqFile)){
+                            FileInputStream fileIn = new FileInputStream(fileName[i].getAbsolutePath());
+                            byte [] data = new byte[(int)fileName[i].length()];
+                            fileIn.read(data);
+                            dout.writeInt(data.length);
+                            dout.write(data);
+                        }
+                    }
+                }
             } catch (Exception e) {
                 // TODO: handle exception
             }

@@ -13,7 +13,7 @@ public class Client {
     DataInputStream din;
     DataOutputStream dout;
     Object[][] fileName;
-
+    int file;
     public static void main(String[] args) {
         new Client().Model();
 
@@ -21,7 +21,7 @@ public class Client {
 
     public Client() {
         // connect to server
-        int file;
+        
 
         try {
             clientSocket = new Socket("localhost", 8087);
@@ -32,7 +32,6 @@ public class Client {
             fileName = new Object[file][2];
             for (int i = 0; i < file; i++) {
                 fileName[i][0] = din.readUTF();
-                fileName[i][1] = new JButton("Download");
             }
 
         } catch (Exception e) {
@@ -43,21 +42,11 @@ public class Client {
     }
 
     public void Model() {
-        JFrame frameFile = new JFrame();
-        frameFile.setTitle("Client");
-        frameFile.setSize(500, 800);
-        frameFile.setVisible(true);
-
-        String[] col = { "File", "Download" };
-        JPanel jpFile = new JPanel();
-        JTable jtFile = new JTable(fileName, col);
-
-        JScrollPane jspFile = new JScrollPane(jtFile);
-        jpFile.setBounds(0, 0, 500, 400);
-        jpFile.add(jspFile);
-        frameFile.getContentPane().add(jpFile);
+        DownloadPage downloadPage = new DownloadPage();
+        downloadPage.setVisible(true);
 
     }
+
 
 }
 
