@@ -52,7 +52,7 @@ class DownloadPage extends JFrame
         dataValues = new String[client.file][4];
         for (int i = 0; i < client.file; i++) {
             dataValues[i][0] = client.fileName[i][0].toString();
-            dataValues[i][1] = client.fileName[i][1].toString();
+            dataValues[i][1] = client.fileName[i][1].toString().substring(client.fileName[i][1].toString().indexOf("/")+1,client.fileName[i][1].toString().length());
             dataValues[i][2] = client.fileName[i][2].toString();
             dataValues[i][3] = client.fileName[i][0].toString();
         }
@@ -86,7 +86,7 @@ class DownloadPage extends JFrame
                             DataOutputStream dout = new DataOutputStream(client.clientSocket.getOutputStream());
                             DataInputStream din = new DataInputStream(client.clientSocket.getInputStream());
                             dout.writeUTF(button.getName());
-                            String filePath = "C:/Users/tubti/OneDrive - Silpakorn University/Documents/Thread/Client/"+button.getName();
+                            String filePath = "C:/Users/api_q/OneDrive/เดสก์ท็อป/CilentFile/"+button.getName();
                             byte [] data = new byte[(int)din.readInt()];
                             din.readFully(data,0,data.length);
                             File fileDownload = new File(filePath);

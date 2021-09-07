@@ -32,7 +32,7 @@ public class Server {
 
     private void Model() throws IOException {
         // Reader name file
-        String path = "C:/Users/tubti/OneDrive - Silpakorn University/Documents/Thread/server/";
+        String path = "C:/Users/api_q/OneDrive/เดสก์ท็อป/OperatingProj";
         File file = new File(path);
         fileName = file.listFiles();
         String[][] arr = new String[fileName.length][2];
