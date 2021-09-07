@@ -1,12 +1,9 @@
 
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
 import javax.swing.*;
-import javax.swing.table.*;
+
 
 public class Client {
     Socket clientSocket;

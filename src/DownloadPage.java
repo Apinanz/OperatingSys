@@ -81,7 +81,8 @@ class DownloadPage extends JFrame
 
                 {
 
-                        int temp = JOptionPane.showConfirmDialog(table, "Do you want to download " + button.getName() + "?");
+                    int temp = JOptionPane.showConfirmDialog(topPanel1, "Do you want to download " + button.getName() + " ?",
+                     "Customized Dialog", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, new ImageIcon("C:/Users/tubti/OneDrive - Silpakorn University/Documents/Thread/among.png"));
 
                         if (temp == 0) {
                             try {
