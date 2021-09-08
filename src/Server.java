@@ -43,7 +43,7 @@ public class Server {
             arr[i][0] = fileName[i].getName();
             arr[i][1] = fileName[i].length() / 1024 + 1 + " " + "KB";
         }
-        String[] col = { "All Files", "Size" };
+        String[] col = { "All Files", "Size"};
 
         // frame Main Server
         JFrame frameMain = new JFrame();
