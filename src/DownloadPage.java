@@ -219,7 +219,7 @@ class DownloadPage extends JFrame {
             DataOutputStream dout = new DataOutputStream(client.clientSocket.getOutputStream());
             DataInputStream din = new DataInputStream(client.clientSocket.getInputStream());
             dout.writeUTF(button.getName());
-            String filePath = "C:/Users/tubti/OneDrive - Silpakorn University/Documents/Thread/Client/" + button.getName();
+            String filePath = "C:/Users/katakarn/Desktop/Client Files/" + button.getName();
             byte[] data = new byte[(int) din.readInt()];
 
             File fileDownload = new File(filePath);

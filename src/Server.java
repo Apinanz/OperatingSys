@@ -21,27 +21,29 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.BorderLayout;
+import java.awt.*; 
 
 public class Server {
     public static final int PORT = 8087;
     File[] fileName;
+
     public static void main(String[] args) throws IOException {
-       new Server().Model();
+        new Server().Model();
 
     }
 
     private void Model() throws IOException {
         // Reader name file
         // String path = "C:/Users/api_q/OneDrive/เดสก์ท็อป/OperatingProj";
-        String path = "C:/Users/tubti/OneDrive - Silpakorn University/Documents/Thread/server/";
+        String path = "C:/Users/katakarn/Desktop/Server Files";
         File file = new File(path);
         fileName = file.listFiles();
         String[][] arr = new String[fileName.length][2];
         for (int i = 0; i < fileName.length; i++) {
             arr[i][0] = fileName[i].getName();
-            arr[i][1] = fileName[i].length()/1024+1 +" "+"KB";
+            arr[i][1] = fileName[i].length() / 1024 + 1 + " " + "KB";
         }
-        String[] col = { "ไฟล์ทั้งหมด", "ขนาด" };
+        String[] col = { "All Files", "Size" };
 
         // frame Main Server
         JFrame frameMain = new JFrame();
@@ -71,6 +73,7 @@ public class Server {
                 JPanel jpFile = new JPanel();
                 JTable jtFile = new JTable(arr, col);
                 JScrollPane jspFile = new JScrollPane(jtFile);
+                jpFile.setBackground(Color.cyan);
                 jpFile.setBounds(0, 0, 500, 400);
                 jpFile.add(jspFile);
                 frameServer.getContentPane().add(jpFile);
@@ -166,7 +169,7 @@ public class Server {
                 DataOutputStream dout = new DataOutputStream(clientSocket.getOutputStream());
 
                 dout.writeInt(fileName.length);
-                for(File f : fileName){
+                for (File f : fileName) {
                     dout.writeUTF(f.getName());
                 }
                 for (File f : fileName) {
@@ -177,11 +180,11 @@ public class Server {
                 }
                 while (true) {
                     String reqFile = din.readUTF();
-                    //System.out.println(reqFile);
-                    for(int i=0; i<fileName.length; i++){
-                        if(fileName[i].getName().equals(reqFile)){
+                    // System.out.println(reqFile);
+                    for (int i = 0; i < fileName.length; i++) {
+                        if (fileName[i].getName().equals(reqFile)) {
                             FileInputStream fileIn = new FileInputStream(fileName[i].getAbsolutePath());
-                            byte [] data = new byte[(int)fileName[i].length()];
+                            byte[] data = new byte[(int) fileName[i].length()];
                             fileIn.read(data);
                             dout.writeInt(data.length);
                             dout.write(data);
