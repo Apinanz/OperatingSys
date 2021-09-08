@@ -48,7 +48,7 @@ class DownloadPage extends JFrame {
         for (int i = 0; i < client.file; i++) {
             dataValues[i][0] = client.fileName[i][0].toString();
             dataValues[i][1] = client.fileName[i][1].toString();
-            dataValues[i][2] = client.fileName[i][2].toString();
+            dataValues[i][2] = client.fileName[i][2].toString() + " KB";
             dataValues[i][3] = client.fileName[i][0].toString();
         }
         model.setDataVector(dataValues, columnNames);
@@ -184,7 +184,7 @@ class DownloadPage extends JFrame {
                             dialog = new JDialog();
                             dialog.setTitle("Processing");
                             dialog.setLayout(new GridBagLayout());
-                            dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+                            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
                             GridBagConstraints gbc = new GridBagConstraints();
                             gbc.insets = new Insets(2, 2, 2, 2);
                             gbc.weightx = 10;
