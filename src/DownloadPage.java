@@ -233,6 +233,7 @@ class DownloadPage extends JFrame {
                 total += count;
                 setProgress((int)((total*100)/data.length));
                 fout.write(data, 0, count);
+                Thread.sleep(1);
                 if(total == data.length){
                     break;
                 }
