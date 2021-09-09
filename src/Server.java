@@ -55,7 +55,7 @@ public class Server {
         frameMain.setLayout(new BoxLayout(frameMain.getContentPane(), BoxLayout.Y_AXIS));
 
         JLabel jLabel = new JLabel("Welcome to Server");
-        jLabel.setBounds(200, 53, 36, 14);
+        //jLabel.setBounds(1000, 1000, 1000, 1000);
         frameMain.getContentPane().add(jLabel);
 
         ///JPanel jpMain = new JPanel();
