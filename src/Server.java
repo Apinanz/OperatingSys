@@ -47,12 +47,20 @@ public class Server {
 
         // frame Main Server
         JFrame frameMain = new JFrame();
-        frameMain.setSize(500, 800);
+        frameMain.setSize(500, 600);
+        frameMain.setLocation(700,100);
         frameMain.setTitle("Welcome to Server");
         frameMain.setVisible(true);
+        frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frameMain.setLayout(new BoxLayout(frameMain.getContentPane(), BoxLayout.Y_AXIS));
 
-        JPanel jpMain = new JPanel();
-        jpMain.setLayout(new CardLayout());
+        JLabel jLabel = new JLabel("Welcome to Server");
+        jLabel.setBounds(200, 53, 36, 14);
+        frameMain.getContentPane().add(jLabel);
+
+        ///JPanel jpMain = new JPanel();
+        ///jpMain.setLayout(new CardLayout());
+        ///jpMain.setLayout(new BorderLayout());
 
         // ส่วนของหน้าmain ปุ่ม File
         JPanel jpBut = new JPanel();
@@ -62,7 +70,8 @@ public class Server {
             public void actionPerformed(ActionEvent e) {
                 // Frame Server
                 JFrame frameServer = new JFrame();
-                frameServer.setSize(500, 800);
+                frameServer.setSize(500, 600);
+                frameServer.setLocation(700,100);
                 frameServer.setTitle("Server");
                 frameServer.setLayout(new BoxLayout(frameServer.getContentPane(), BoxLayout.Y_AXIS));
                 frameServer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -106,7 +115,9 @@ public class Server {
                 JFrame frameLog = new JFrame();
                 frameLog.setLayout(new BoxLayout(frameLog.getContentPane(), BoxLayout.Y_AXIS));
                 frameLog.setTitle("Log");
-                frameLog.setSize(500, 800);
+                frameLog.setSize(500, 600);
+                frameLog.setLocation(700,100);
+                frameLog.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
                 // Panel and Lable
                 JPanel jpLog = new JPanel();
@@ -139,8 +150,10 @@ public class Server {
 
         });
 
-        jpMain.add(jpBut, "Panel 2");
-        frameMain.getContentPane().add(jpMain, BorderLayout.CENTER);
+        ///jpMain.add(jpBut, "Panel 2");
+        ///frameMain.getContentPane().add(jpMain, BorderLayout.CENTER);
+        ///jpBut.setLayout(new BorderLayout());
+        frameMain.getContentPane().add(jpBut);
 
         // ส่วนของ connecting
 
