@@ -47,7 +47,7 @@ class DownloadPage extends JFrame {
         dataValues = new String[client.file][4];
         for (int i = 0; i < client.file; i++) {
             dataValues[i][0] = client.fileName[i][0].toString();
-            dataValues[i][1] = client.fileName[i][1].toString();
+            dataValues[i][1] = client.fileName[i][1].toString().substring(client.fileName[i][1].toString().indexOf("/") + 1, client.fileName[i][1].toString().length());
             dataValues[i][2] = client.fileName[i][2].toString() + " KB";
             dataValues[i][3] = client.fileName[i][0].toString();
         }
@@ -74,7 +74,7 @@ class DownloadPage extends JFrame {
 
                 if (temp == 0) {
                     try {
-                        
+
                         new BackgroundWorker().execute();
 
                     } catch (Exception e) {
@@ -184,7 +184,7 @@ class DownloadPage extends JFrame {
                             dialog = new JDialog();
                             dialog.setTitle("Processing");
                             dialog.setLayout(new GridBagLayout());
-                            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                            dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
                             GridBagConstraints gbc = new GridBagConstraints();
                             gbc.insets = new Insets(2, 2, 2, 2);
                             gbc.weightx = 10;
@@ -231,9 +231,11 @@ class DownloadPage extends JFrame {
 
             while ((count = din.read(data)) != -1) {
                 total += count;
-                setProgress((int)((total*100)/data.length));
+                setProgress((int) ((total * 100) / data.length));
+                System.out.println(count + " " + total + " " + data.length);
                 fout.write(data, 0, count);
-                if(total == data.length){
+                Thread.sleep(1);
+                if (total == data.length) {
                     break;
                 }
             }

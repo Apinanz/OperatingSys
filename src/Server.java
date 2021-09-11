@@ -27,7 +27,6 @@ public class Server {
     File[] fileName;
     public static void main(String[] args) throws IOException {
        new Server().Model();
-
     }
 
     private void Model() throws IOException {
@@ -41,6 +40,7 @@ public class Server {
             arr[i][0] = fileName[i].getName();
             arr[i][1] = fileName[i].length()/1024+1 +" "+"KB";
         }
+        
         String[] col = { "ไฟล์ทั้งหมด", "ขนาด" };
 
         // frame Main Server
@@ -50,7 +50,7 @@ public class Server {
         frameMain.setVisible(true);
 
         JPanel jpMain = new JPanel();
-        jpMain.setLayout(new CardLayout());
+//        jpMain.setLayout(new CardLayout());
 
         // ส่วนของหน้าmain ปุ่ม File
         JPanel jpBut = new JPanel();
@@ -137,7 +137,7 @@ public class Server {
         });
 
         jpMain.add(jpBut, "Panel 2");
-        frameMain.getContentPane().add(jpMain, BorderLayout.CENTER);
+        frameMain.getContentPane().add(jpMain, BorderLayout.NORTH);
 
         // ส่วนของ connecting
 
