@@ -128,6 +128,7 @@ class DownloadPage extends JFrame {
             button.setName(value.toString());
 
             return button;
+
         }
 
         public Object getCellEditorValue() {
