@@ -19,7 +19,7 @@ class DownloadPage extends JFrame {
 
     private JTable table;
 
-    private JScrollPane scrollPane, scrollPane1;
+    private JScrollPane scrollPane;
 
     private String[] columnNames;
 
@@ -234,11 +234,12 @@ class DownloadPage extends JFrame {
                 setProgress((int) ((total * 100) / data.length));
                 System.out.println(count + " " + total + " " + data.length);
                 fout.write(data, 0, count);
-                Thread.sleep(1);
                 if (total == data.length) {
+                    Thread.sleep(1);
                     break;
                 }
             }
+            fout.close();
             return null;
         }
     }
