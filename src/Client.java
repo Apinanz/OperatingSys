@@ -2,6 +2,7 @@
 import java.awt.*;
 import java.io.*;
 import java.net.*;
+import java.util.Arrays;
 import java.util.Scanner;
 import javax.swing.*;
 
@@ -11,8 +12,8 @@ public class Client {
     DataInputStream din;
     DataOutputStream dout;
     final int PORT = 8080;
-    int fileLenght;
-    Object[][] fileList;
+    int FileLength;
+    String[][] fileList;
     String file;
     Scanner sc = new Scanner(System.in);
 
@@ -35,25 +36,35 @@ public class Client {
         frameReciveAllFile.setSize(600, 600);
         frameReciveAllFile.setResizable(false);
         frameReciveAllFile.setFont(new Font("TH-Sarabun-PSK", Font.BOLD, 13));
+        frameReciveAllFile.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameReciveAllFile.setLocationRelativeTo(null);
         frameReciveAllFile.setVisible(true);
 
         try {
             din = new DataInputStream(socketClient.getInputStream());
             dout = new DataOutputStream(socketClient.getOutputStream());
-            fileLenght = din.readInt();
-            fileList = new Object[fileLenght][2];
+            FileLength = din.readInt();
+            fileList = new String[FileLength][4];
 
-            String[] colHeaderFileList = {"All File","Size"};
-            String[][] rowfileList = new String[fileLenght][2];
-            for (int i = 0; i < fileLenght; i++) {
-                fileList[i][0] = din.readUTF();
+            String[] colHeaderFileList = {"All File", "File Type", "Size", "Action"};
+            String[][] rowfileList = new String[FileLength][4];
+            for (int i = 0; i < FileLength; i++) {
+                fileList[i][0] = din.readUTF(); // ชื่อไฟล์
             }
-            for (int i = 0; i < fileLenght; i++) {
+            for (int i = 0; i < FileLength; i++) {
+                fileList[i][1] = din.readUTF(); // ชนิดข้อมูลไฟล์
+            }
+            for (int i = 0; i < FileLength; i++) {
+                fileList[i][2] = din.readUTF(); // ขนาดไฟล์
+            }
+            for (int i = 0; i < FileLength; i++) {
                 rowfileList[i][0] = fileList[i][0].toString();
+                rowfileList[i][1] = fileList[i][1].toString();
+                rowfileList[i][2] = fileList[i][2].toString() + "KB";
             }
 
             JTable tableFileList = new JTable(rowfileList, colHeaderFileList);
+            tableFileList.setVisible(true);
             JPanel panelFileList = new JPanel();
             tableFileList.setFont(new Font("TH-Sarabun-PSK", Font.BOLD, 13));
             tableFileList.setRowHeight(40);
@@ -94,7 +105,7 @@ public class Client {
                     System.out.println(Thread.currentThread().getName());
                     Socket socket = new Socket("localhost", 8087);
                     DataInputStream dinClient = new DataInputStream(socket.getInputStream());
-                    String filePath = "C:/Users/katakarn/Desktop/Client Files/" + file;
+                    String filePath = "C:/Users/tubti/OneDrive - Silpakorn University/Documents/Thread/Client/" + file;
                     int startIndex = dinClient.readInt();
                     int fileLength = dinClient.readInt();
                     RandomAccessFile writer = new RandomAccessFile(filePath, "rw");

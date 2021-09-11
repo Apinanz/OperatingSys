@@ -22,7 +22,7 @@ public class Server {
             ServerSocket serverSocket = new ServerSocket(8087);
             while (true) {
                 System.out.println("Waiting Connecting from client : " + PORT);
-                socketClient = socketServer.accept(); //Listens for a connection to be made to this socket and accepts it.
+                socketClient = socketServer.accept();
                 new HandleClient(socketClient, serverSocket).start();
             }
         } catch (Exception e) {
@@ -38,7 +38,7 @@ class HandleClient extends Thread {
     Socket socketClient;
     DataInputStream din;
     DataOutputStream dout;
-    String path = "C:/Users/katakarn/Desktop/Server Files";
+    String path = "C:/Users/tubti/OneDrive - Silpakorn University/Documents/Thread/server/";
     File file = new File(path);
     File[] fileName;
 
@@ -58,6 +58,10 @@ class HandleClient extends Thread {
             }
             for (File f : fileName) {
                 dout.writeUTF("" + Files.probeContentType(f.toPath())); // ชนิดข้อมูลไฟล์
+            }
+            for (File f : fileName) {
+                long tem = f.length()/1024+1;
+                dout.writeUTF("" + tem); // ขนาดไฟล์
             }
             sendFileReqToClient();
         } catch (Exception e) {
