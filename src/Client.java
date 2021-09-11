@@ -1,58 +1,129 @@
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.net.Socket;
+import java.awt.*;
+import java.io.*;
+import java.net.*;
+import java.util.Scanner;
 import javax.swing.*;
 
-
 public class Client {
-    Socket clientSocket;
+
+    Socket socketClient;
     DataInputStream din;
     DataOutputStream dout;
-    Object[][] fileName;
-    int file;
-    public static void main(String[] args) {
-        new Client().Model();
+    final int PORT = 8080;
+    int fileLenght;
+    Object[][] fileList;
+    String file;
+    Scanner sc = new Scanner(System.in);
 
+    public static void main(String[] args) throws IOException {
+        new Client().run();
     }
 
     public Client() {
-        // connect to server
-        
-
         try {
-            clientSocket = new Socket("localhost", 8087);
-            din = new DataInputStream(clientSocket.getInputStream());
-            dout = new DataOutputStream(clientSocket.getOutputStream());
-
-            file = din.readInt();
-            fileName = new Object[file][4];
-            for (int i = 0; i < file; i++) {
-                fileName[i][0] = din.readUTF();
-            }
-            for (int i = 0; i < file; i++) {
-                fileName[i][1] = din.readUTF(); // ชนิดข้อมูลไฟล์
-            }
-            for (int i = 0; i < file; i++) {
-                String n = "" + din.readInt(); // ขนาดไฟล์
-                fileName[i][2] = din.readInt()/1024+1;
-            }
-
+            socketClient = new Socket("localhost", PORT);
+            System.out.println("Connecing...");
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Can't Connected. Please Try Again!", "ERROR CONNECTED",
-                    JOptionPane.ERROR_MESSAGE);
-
+            //TODO: handle exception
         }
     }
 
-    public void Model() {
-        DownloadPage downloadPage = new DownloadPage();
-        downloadPage.setVisible(true);
+    public void reciveAllFile() {
+        JFrame frameReciveAllFile = new JFrame();
+        frameReciveAllFile.setTitle("DOWNLOADER");
+        frameReciveAllFile.setSize(600, 600);
+        frameReciveAllFile.setResizable(false);
+        frameReciveAllFile.setFont(new Font("TH-Sarabun-PSK", Font.BOLD, 13));
+        frameReciveAllFile.setLocationRelativeTo(null);
+        frameReciveAllFile.setVisible(true);
+
+        try {
+            din = new DataInputStream(socketClient.getInputStream());
+            dout = new DataOutputStream(socketClient.getOutputStream());
+            fileLenght = din.readInt();
+            fileList = new Object[fileLenght][2];
+
+            String[] colHeaderFileList = {"All File","Size"};
+            String[][] rowfileList = new String[fileLenght][2];
+            for (int i = 0; i < fileLenght; i++) {
+                fileList[i][0] = din.readUTF();
+            }
+            for (int i = 0; i < fileLenght; i++) {
+                rowfileList[i][0] = fileList[i][0].toString();
+            }
+
+            JTable tableFileList = new JTable(rowfileList, colHeaderFileList);
+            JPanel panelFileList = new JPanel();
+            tableFileList.setFont(new Font("TH-Sarabun-PSK", Font.BOLD, 13));
+            tableFileList.setRowHeight(40);
+
+            JScrollPane scrollPaneFileList = new JScrollPane(tableFileList);
+            panelFileList.add(scrollPaneFileList);
+            frameReciveAllFile.add(panelFileList);
+            reqFile();
+
+        } catch (Exception e) {
+            System.out.println("can't connecting");
+        }
 
     }
 
+    public void reqFile() {
+        while (true) {
+            file = sc.nextLine();
+            if (file.equals("Exit")) {
+                break;
+            }
+            try {
+                dout = new DataOutputStream(socketClient.getOutputStream());
+                dout.writeUTF(file);
+                reciveReqrFile();
+            } catch (Exception e) {
 
+            }
+        }
+    }
+
+    public void reciveReqrFile() throws IOException {
+        din = new DataInputStream(socketClient.getInputStream());
+        int size = din.readInt();
+        for (int i = 0; i < 10; i++) {
+            new Thread(() -> {
+                try {
+                    System.out.println(Thread.currentThread().getName());
+                    Socket socket = new Socket("localhost", 8087);
+                    DataInputStream dinClient = new DataInputStream(socket.getInputStream());
+                    String filePath = "C:/Users/katakarn/Desktop/Client Files/" + file;
+                    int startIndex = dinClient.readInt();
+                    int fileLength = dinClient.readInt();
+                    RandomAccessFile writer = new RandomAccessFile(filePath, "rw");
+                    writer.seek(startIndex);
+                    byte[] data = new byte[fileLength];
+                    int receive = 0;
+                    while (receive > -1) {
+                        receive = dinClient.read(data);
+                        if (receive == -1) {
+                            break;
+                        }
+                        writer.write(data, 0, receive);
+                    }
+                    System.out.println("finish");
+                    //File fileDownload = new File(filePath);
+                    //FileOutputStream fout = new FileOutputStream(fileDownload);
+                    dinClient.close();
+                    writer.close();
+                    socket.close();
+                    System.out.println("Recive");
+                } catch (Exception e) {
+                    //System.out.println("Can't Recive");
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+    }
+
+    public void run() throws IOException {
+        reciveAllFile();
+    }
 }
-
-
-
